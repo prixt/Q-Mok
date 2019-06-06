@@ -23,10 +23,7 @@ class Gameplay(Node):
     
     def timer_timeout(self):
         self.board.check_job()
-        if not self.board.is_measuring:
-            self.timer.stop()
-            self.update_status_text()
-        else:
+        if self.board.is_measuring:
             print('Still waiting...')
 
     def update_status_text(self):
@@ -51,10 +48,22 @@ class Gameplay(Node):
     
     def restart_pressed(self):
         self.get_tree().reload_current_scene()
+    
+    def show_circuit(self, text):
+        self.circuit_text.set_text(text)
+        self.circuit_text.set_visible(True)
+    
+    def job_cleanup(self):
+        self.circuit_text.set_visible(False)
+        self.timer.stop()
+        self.update_status_text()
 
     def _ready(self):
         self.timer = self.get_node('Timer')
         self.board = self.get_node('Board')
         self.status_text = self.get_node('GameStatus')
+        self.circuit_text = self.get_node('CircuitText')
         self.board.connect('game_finished', self, 'game_over')
+        self.board.connect('circuit_finished', self, 'show_circuit')
+        self.board.connect('job_finished', self, 'job_cleanup')
         self.tick()

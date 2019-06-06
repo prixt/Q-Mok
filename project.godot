@@ -23,6 +23,15 @@ config/icon="res://icon.png"
 
 Globals="*res://Scenes/Globals.tscn"
 
+[debug]
+
+gdscript/warnings/enable=false
+gdscript/warnings/unused_variable=false
+gdscript/warnings/unused_class_variable=false
+gdscript/warnings/unused_argument=false
+gdscript/warnings/unreachable_code=false
+gdscript/warnings/standalone_expression=false
+
 [display]
 
 window/size/width=800

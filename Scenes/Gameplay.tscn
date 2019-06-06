@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/Gameplay.py" type="Script" id=1]
 [ext_resource path="res://Assets/text_font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/Board.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Assets/subtext_font.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Assets/ascii_font.tres" type="DynamicFont" id=5]
 
 [node name="Gameplay" type="Node"]
 script = ExtResource( 1 )
@@ -47,6 +48,23 @@ custom_fonts/font = ExtResource( 4 )
 text = "Toggle Quantum Device"
 align = 2
 autowrap = true
+
+[node name="CircuitText" type="Label" parent="."]
+visible = false
+self_modulate = Color( 1, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 140.0
+margin_top = 50.0
+margin_right = -140.0
+margin_bottom = -20.0
+custom_fonts/font = ExtResource( 5 )
+clip_text = true
+
+[node name="Polygon2D" type="Polygon2D" parent="CircuitText"]
+modulate = Color( 1, 1, 1, 0.588235 )
+show_behind_parent = true
+polygon = PoolVector2Array( 520, 0, 520, 530, 0, 530, 0, 0 )
 [connection signal="timeout" from="Timer" to="." method="timer_timeout"]
 [connection signal="pressed" from="Restart" to="." method="restart_pressed"]
 [connection signal="toggled" from="QuantumToggle" to="Board" method="quantum_toggle"]

@@ -20,6 +20,8 @@ class Board(TileMap):
     is_cleared = export(bool, False)
 
     game_finished = signal()
+    circuit_finished = signal()
+    job_finished = signal()
     
     gate_start_rock = None
     current_gate = None
@@ -130,7 +132,9 @@ class Board(TileMap):
         for op in self.quantum_operations:
             circuit_builder.add_operation(op, self.backend)
         qr, cr, circuit = circuit_builder.build()
-        qobj = assemble( transpile(circuit, self.backend, optimization_level=2) , self.backend, memory=True, shots=128)
+        circuit_text = circuit.draw(output='text',line_length=75)
+        self.emit_signal('circuit_finished', circuit_text.single_string())
+        qobj = assemble( transpile(circuit, self.backend, optimization_level=2) , self.backend, memory=True, shots=32)
         self.job = self.backend.run(qobj)
         self.is_measuring = True
 
@@ -139,6 +143,7 @@ class Board(TileMap):
             status = self.job.status()
             if status == JobStatus.DONE:
                 self.cleanup()
+                self.emit_signal('job_finished')
             elif status == JobStatus.ERROR or status == JobStatus.CANCELLED:
                 raise QiskitError
 
@@ -151,7 +156,7 @@ class Board(TileMap):
         # for k,v in counts.items():
         #     for _ in range(v):
         #         memory_list.append(k)
-        pick = random.choice(memory_list)
+        pick = memory_list[0]
         pick = pick[::-1]
 
         arr = []

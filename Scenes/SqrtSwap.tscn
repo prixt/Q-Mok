@@ -3,5 +3,6 @@
 [ext_resource path="res://Assets/swap_gate.png" type="Texture" id=1]
 
 [node name="SqrtSwap" type="Sprite"]
+self_modulate = Color( 0, 0.560784, 0.443137, 1 )
 texture = ExtResource( 1 )
 offset = Vector2( 16, 0 )
