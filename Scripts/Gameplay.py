@@ -1,5 +1,6 @@
 from godot import exposed, export
 from godot.bindings import Node
+from Scripts.Quantum import real_name
 
 @exposed
 class Gameplay(Node):
@@ -24,6 +25,7 @@ class Gameplay(Node):
     def timer_timeout(self):
         self.board.check_job()
         if self.board.is_measuring:
+            self.get_node('WaitIndicator').set_visible(True)
             print('Still waiting...')
 
     def update_status_text(self):
@@ -55,8 +57,15 @@ class Gameplay(Node):
     
     def job_cleanup(self):
         self.circuit_text.set_visible(False)
+        self.get_node('WaitIndicator').set_visible(False)
         self.timer.stop()
         self.update_status_text()
+
+    def quantum_toggle(self, button_pressed):
+        if button_pressed:
+            self.get_node('DeviceName').set_text( "Quantum Device:\n" + real_name )
+        else:
+            self.get_node('DeviceName').set_text( "Local Simulator" )
 
     def _ready(self):
         self.timer = self.get_node('Timer')
@@ -66,4 +75,5 @@ class Gameplay(Node):
         self.board.connect('game_finished', self, 'game_over')
         self.board.connect('circuit_finished', self, 'show_circuit')
         self.board.connect('job_finished', self, 'job_cleanup')
+
         self.tick()

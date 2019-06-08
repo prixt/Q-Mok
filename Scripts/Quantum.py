@@ -8,6 +8,7 @@ from qiskit.compiler import transpile, assemble
 IBMQ.enable_account('32f11e0c68cdb036375f4db906dc33b6470a01a973f84c43596b13dabace3d7d1744f4c09defce4e2d2eb33bf0bc036edda953a764e6b6c69eec9f892bea1580')
 q_device = IBMQ.backends(filters=lambda x: x.configuration().n_qubits == 5 and x.configuration().memory and not x.configuration().simulator)
 real_backend = least_busy(q_device)
+real_name = real_backend.name()
 
 sim_backend = qiskit.Aer.get_backend('qasm_simulator')
 
@@ -65,5 +66,6 @@ class CircuitBuilder():
 
     
     def build(self):
+        self.circuit.barrier()
         self.circuit.measure(self.qr, self.cr)
         return self.qr, self.cr, self.circuit

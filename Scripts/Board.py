@@ -48,6 +48,8 @@ class Board(TileMap):
                             num = len( self.quantum_rocks )
                             self.quantum_rocks[rock.get_name()] = num
                             self.quantum_rocks_inv.append(rock)
+                            if not self.gameplay.is_white:
+                                self.quantum_operations.append( ('x', num) )
                             self.quantum_operations.append( ('h', num) )
                         elif self.gameplay.is_white:
                             rock.value = WHITE
@@ -265,7 +267,6 @@ class Board(TileMap):
                         self.current_gate.rotation_degrees = 0.0
                     else:
                         self.current_gate.rotation_degrees = 90.0
-
 
     def _ready(self):
         self.gameplay = self.get_parent()
