@@ -1,16 +1,17 @@
 import qiskit
-from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit, IBMQ
+from qiskit import Aer, QuantumRegister, ClassicalRegister, QuantumCircuit, IBMQ
 from qiskit.providers import JobStatus
 from qiskit.providers.ibmq import least_busy
 from qiskit.exceptions import QiskitError
 from qiskit.compiler import transpile, assemble
+from Scripts.ibmq_account import account_key
 
-IBMQ.enable_account('32f11e0c68cdb036375f4db906dc33b6470a01a973f84c43596b13dabace3d7d1744f4c09defce4e2d2eb33bf0bc036edda953a764e6b6c69eec9f892bea1580')
+IBMQ.enable_account(account_key)
 q_device = IBMQ.backends(filters=lambda x: x.configuration().n_qubits == 5 and x.configuration().memory and not x.configuration().simulator)
 real_backend = least_busy(q_device)
 real_name = real_backend.name()
 
-sim_backend = qiskit.Aer.get_backend('qasm_simulator')
+sim_backend = Aer.get_backend('qasm_simulator')
 
 class CircuitBuilder():
     def __init__(self, register_size):
