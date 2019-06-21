@@ -57,7 +57,6 @@ mouse_right_button={
 [python_script]
 
 verbose=true
-print_startup_info=false
 
 [rendering]
 
